@@ -15,3 +15,6 @@ Assets/OpenCVForUnity/**/*
 Assets/OpenCVForUnity*
 Assets/Plugins/UniRx/**/*
 Assets/Plugins/UniRx*
+Assets/StreamingAssets/**/*
+Assets/SpicyPixel/**/*
+Assets/SpicyPixel.meta
