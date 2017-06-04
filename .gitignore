@@ -1,0 +1,17 @@
+*.db
+
+*.DS_Store
+
+Library/
+Temp/
+
+*.csproj
+*.unityproj
+*.sln
+*.userprefs
+obj/
+.vs/
+Assets/OpenCVForUnity/**/*
+Assets/OpenCVForUnity*
+Assets/Plugins/UniRx/**/*
+Assets/Plugins/UniRx*
