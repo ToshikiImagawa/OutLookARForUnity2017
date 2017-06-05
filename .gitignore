@@ -11,6 +11,7 @@ Temp/
 *.userprefs
 obj/
 .vs/
+Assets/StreamingAssets/**/*
 Assets/OpenCVForUnity/**/*
 Assets/OpenCVForUnity*
 Assets/Plugins/UniRx/**/*
