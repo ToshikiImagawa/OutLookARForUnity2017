@@ -11,17 +11,10 @@ namespace OutLookAR.Test
 {
     public class CameraTest : MonoBehaviour
     {
-
-        // Use this for initialization
-        void Start()
-        {
-            CaptureManager.Instance.onUpdateTexture.AddListener(c => UpdateScreen(c));
-        }
-
         // Update is called once per frame
-        void UpdateScreen(Texture2D tex)
+        public void UpdateScreen(Texture2D tex)
         {
-            ARCameraManager.Instance.UpdateTexture(tex);
+            ARCameraManager.Instance.UpdateScreenTexture(tex);
         }
     }
 }
