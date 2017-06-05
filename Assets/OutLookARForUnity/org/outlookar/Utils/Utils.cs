@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using OpenCVForUnity;
-using System.Threading.Tasks;
 
 namespace OutLookAR
 {
@@ -138,14 +137,10 @@ namespace OutLookAR
             {
                 throw new ApplicationException("FromToLookRotationの引数が2つずつではありません。");
             }
-            var forDirections = new Vector3[2];
-
-            forDirections[0] = toDirections[0].normalized - fromDirections[0].normalized;
-            forDirections[1] = toDirections[1].normalized - fromDirections[1].normalized;
             var fromDirectionM = fromDirections[0].normalized + (fromDirections[1].normalized - fromDirections[0].normalized) / 2;
             var toDirectionM = toDirections[0].normalized + (toDirections[1].normalized - toDirections[0].normalized) / 2;
 
-            var axis = Vector3.Cross(forDirections[0].normalized, forDirections[1].normalized);
+            var axis = Vector3.Cross(toDirections[0].normalized - fromDirections[0].normalized, toDirections[1].normalized - fromDirections[1].normalized);
             var orthogonal = Vector3.Project(fromDirectionM.normalized, axis.normalized);
             var fromDirectionMO = fromDirectionM.normalized - orthogonal;
             var toDirectionMO = toDirectionM.normalized - orthogonal;
@@ -277,40 +272,6 @@ namespace OutLookAR
                 for (int i = 0; i < array.Length; ++i) SafeDispose(ref array[i]);
                 array = null;
             }
-        }
-        /// <summary>
-        /// Multiplies the matrices parallel.
-		/// 並列実行による行列計算
-        /// </summary>
-        /// <param name="matA">Mat a.</param>
-        /// <param name="matB">Mat b.</param>
-        /// <param name="result">Result.</param>
-        public static void MultiplyMatricesParallel(ArrayMat matA, ArrayMat matB,out ArrayMat result){
-            double[,] data = new double[matA.Rows,matB.Cols];
-            MultiplyMatricesParallel(matA.ToArray,matB.ToArray,data);
-            result = new ArrayMat(data);
-        }
-        static void MultiplyMatricesParallel(double[,] matA, double[,] matB, double[,] result)
-        {
-            int matACols = matA.GetLength(1);
-            int matBRows = matB.GetLength(0);
-            int matBCols = matB.GetLength(1);
-            int matARows = matA.GetLength(0);
-            if(matBRows!=matACols)
-                throw new OutLookARException(string.Format("matAの列とmatBの行の大きさが一致しません。\n"
-                +"matA.Cols = {0} != matB.Rows = {1}.",matACols,matBRows));
-            Parallel.For(0, matARows, i =>
-            {
-                for (int j = 0; j < matBCols; j++)
-                {
-                    double temp = 0;
-                    for (int k = 0; k < matACols; k++)
-                    {
-                        temp += matA[i, k] * matB[k, j];
-                    }
-                    result[i, j] = temp;
-                }
-            });
         }
     }
 }

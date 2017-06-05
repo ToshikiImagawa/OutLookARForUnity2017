@@ -8,6 +8,7 @@
 **/
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using OpenCVForUnity;
 namespace OutLookAR
 {
@@ -59,7 +60,7 @@ namespace OutLookAR
         /// The init done.
         /// </summary>
         bool initDone = false;
-        
+
         public OnUpdateTexture onUpdateTexture = new OnUpdateTexture();
         public OnUpdateMat onUpdateMat = new OnUpdateMat();
 
@@ -74,6 +75,8 @@ namespace OutLookAR
             if (webCamTexture.didUpdateThisFrame)
             {
 #endif
+                rgbaMat.Dispose();
+                rgbaMat = new Mat(webCamTexture.height, webCamTexture.width, CvType.CV_8UC4);
                 OpenCVForUnity.Utils.webCamTextureToMat(webCamTexture, rgbaMat, colors);
                 if (webCamTexture.videoVerticallyMirrored)
                 {
@@ -134,6 +137,8 @@ namespace OutLookAR
                     }
                 }
                 onUpdateMat.Invoke(rgbaMat);
+                DestroyImmediate(texture);
+                texture = new Texture2D(webCamTexture.width, webCamTexture.height, TextureFormat.RGBA32, false);
                 OpenCVForUnity.Utils.matToTexture2D(rgbaMat, texture, colors);
                 onUpdateTexture.Invoke(texture);
             }
@@ -230,8 +235,9 @@ namespace OutLookAR
         {
             if (AutoStart)
             {
-                Play();
+                Play(1);
             }
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
 
         // Update is called once per frame
@@ -239,9 +245,15 @@ namespace OutLookAR
         {
             Change();
         }
+
+        void OnDisable()
+        {
+            Stop();
+            webCamTexture.Stop();
+        }
         [System.Serializable]
-        public class OnUpdateTexture : UnityEngine.Events.UnityEvent<Texture2D> { }
+        public class OnUpdateTexture : UnityEvent<Texture2D> { }
         [System.Serializable]
-        public class OnUpdateMat : UnityEngine.Events.UnityEvent<Mat> { }
+        public class OnUpdateMat : UnityEvent<Mat> { }
     }
 }

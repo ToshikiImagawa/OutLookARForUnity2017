@@ -11,10 +11,9 @@ Temp/
 *.userprefs
 obj/
 .vs/
+Assets/StreamingAssets/**/*
 Assets/OpenCVForUnity/**/*
 Assets/OpenCVForUnity*
 Assets/Plugins/UniRx/**/*
 Assets/Plugins/UniRx*
-Assets/StreamingAssets/**/*
-Assets/SpicyPixel/**/*
-Assets/SpicyPixel.meta
+Assets/OutLookARForUnity/Resources/**/*
